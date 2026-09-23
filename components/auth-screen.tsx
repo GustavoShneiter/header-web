@@ -1,4 +1,5 @@
 "use client";
+import Link from "next/link";
 import { useEffect, useState, type FormEvent } from "react";
 import { supabase } from "@/lib/supabase";
 import "./auth-screen.css";
@@ -28,13 +29,13 @@ export default function AuthScreen({ recovery = false, onRecovered = () => {} }:
   const [visible, setVisible] = useState(false);
   const [story, setStory] = useState(0);
   const stories = [
-    {image:"/login/morning-focus.png",top:"O que importa não pede pressa.",bottom:"Pede presença."},
-    {image:"/login/yoga-sunrise.png",top:"Respire antes de continuar.",bottom:"Seu ritmo também é caminho."},
-    {image:"/login/coffee-ritual.png",top:"Um pequeno ritual muda o dia.",bottom:"Comece pelo próximo passo."},
-    {image:"/login/library-planning.png",top:"Clareza abre espaço.",bottom:"E espaço deixa a vida acontecer."},
-    {image:"/login/park-reset.png",top:"Você não precisa fazer tudo hoje.",bottom:"Só precisa começar o que importa."},
+    {image:"/login/morning-focus.png",top:"Seu tempo.",bottom:"Seu ritmo."},
+    {image:"/login/yoga-sunrise.png",top:"Menos ruído.",bottom:"Mais presença."},
+    {image:"/login/coffee-ritual.png",top:"Um passo.",bottom:"Depois, outro."},
+    {image:"/login/library-planning.png",top:"Clareza para",bottom:"o que importa."},
+    {image:"/login/park-reset.png",top:"Aqui começa",bottom:"o seu espaço."},
   ];
-  useEffect(() => { const timer = window.setInterval(() => setStory(current => (current + 1) % stories.length), 8000); return () => window.clearInterval(timer); }, []);
+  useEffect(() => { const timer = window.setInterval(() => setStory(current => (current + 1) % stories.length), 8000); return () => window.clearInterval(timer); }, [stories.length]);
   const title = recovery ? "Escolha sua nova senha." : mode === "signup" ? "Crie sua conta." : mode === "reset" ? "Recupere seu acesso." : mode === "verify" ? "Confirme seu e-mail." : "Bom ter você por aqui.";
   const action = recovery ? "Salvar nova senha" : mode === "signup" ? "Criar conta" : mode === "reset" ? "Enviar recuperação" : mode === "verify" ? "Confirmar código" : "Entrar";
 
@@ -85,15 +86,15 @@ export default function AuthScreen({ recovery = false, onRecovered = () => {} }:
   function change(next: typeof mode) { setMode(next); setMessage(""); setFailed(false); }
   return <main className="auth-page">
     <aside className="auth-story" style={{backgroundImage:`linear-gradient(90deg,rgba(20,31,22,.91),rgba(20,31,22,.53)),url(${stories[story].image})`}}>
-      <a className="auth-brand" href="/"><span>h.</span>header</a>
+      <Link className="auth-brand" href="/"><span>h.</span>header</Link>
       <div className="auth-story-copy" key={story}><p className="auth-kicker">SEU ESPAÇO PESSOAL</p><h1>{stories[story].top}<br/><span>{stories[story].bottom}</span></h1></div>
-      <div className="auth-story-footer"><div className="auth-story-dots" aria-label={`Imagem ${story+1} de ${stories.length}`}>{stories.map((item,index)=><button key={item.image} type="button" aria-label={`Ver frase ${index+1}`} aria-current={story===index} onClick={()=>setStory(index)}/>)}</div><small>Planeje com intenção. Viva com mais leveza.</small></div>
+      <div className="auth-story-footer"><div className="auth-story-dots" aria-label={`Imagem ${story+1} de ${stories.length}`}>{stories.map((item,index)=><button key={item.image} type="button" aria-label={`Ver imagem ${index+1}`} aria-current={story===index} onClick={()=>setStory(index)}/>)}</div></div>
     </aside>
     <section className="auth-form-panel">
       <div className="auth-card">
         <span className="auth-mobile-brand">header</span>
-        <p className="auth-kicker">BEM-VINDO AO HEADER</p><h2>{title}</h2>
-        <p className="auth-intro">Use a mesma conta do aplicativo para acessar suas tarefas.</p>
+        <p className="auth-kicker">HEADER</p><h2>{title}</h2>
+        <p className="auth-intro">Entre para continuar.</p>
         {!recovery && <><button className="auth-google" type="button" disabled={busy || !supabase} onClick={google}>Continuar com Google</button><div className="auth-divider"><span>ou com seu e-mail</span></div></>}
         <form onSubmit={submit}>
           {!recovery && <label>E-mail<input autoComplete="email" type="email" required value={email} onChange={e => setEmail(e.target.value)} placeholder="voce@exemplo.com" disabled={busy}/></label>}
