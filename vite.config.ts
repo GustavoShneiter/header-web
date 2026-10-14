@@ -12,6 +12,9 @@ const { d1, r2 } = hostingConfig;
 // macOS Seatbelt blocks FSEvents, so Codex previews need polling for HMR.
 const isCodexSeatbeltSandbox = process.env.CODEX_SANDBOX === "seatbelt";
 const managedLinux = readExecutionProfile() === "managed-linux";
+// Lets local development run when the native Workers emulator is unavailable.
+// Production builds and ordinary local runs continue to use the Cloudflare plugin.
+const skipLocalWorker = process.env.HEADER_SKIP_LOCAL_WORKER === "1";
 
 const localBindingConfig = {
   main: "vinext/server/fetch-handler",
@@ -48,9 +51,12 @@ export default defineConfig(async () => {
   process.env.MINIFLARE_REGISTRY_PATH ??= ".wrangler/registry";
 
   // Wrangler snapshots its log path while the Cloudflare plugin is imported.
-  const { cloudflare } = await import("@cloudflare/vite-plugin");
+  const { cloudflare } = skipLocalWorker
+    ? { cloudflare: null }
+    : await import("@cloudflare/vite-plugin");
 
   return {
+    ...(skipLocalWorker ? { cacheDir: ".vite-local-cache" } : {}),
     server: {
       ...(managedLinux ? { host: "0.0.0.0", allowedHosts: ["terminal.local"] } : {}),
       ...(isCodexSeatbeltSandbox ? { watch: { useFsEvents: false, usePolling: true } } : {}),
@@ -58,11 +64,13 @@ export default defineConfig(async () => {
     plugins: [
       vinext(),
       sites({ mockAuth: !managedLinux }),
-      cloudflare({
-        viteEnvironment: { name: "rsc", childEnvironments: ["ssr"] },
-        inspectorPort: false,
-        config: localBindingConfig,
-      }),
+      ...(cloudflare
+        ? [cloudflare({
+            viteEnvironment: { name: "rsc", childEnvironments: ["ssr"] },
+            inspectorPort: false,
+            config: localBindingConfig,
+          })]
+        : []),
     ],
   };
 });
