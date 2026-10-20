@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { useEffect, useState, type FormEvent } from "react";
-import { supabase } from "@/lib/supabase";
+import type { SupabaseClient } from "@supabase/supabase-js";
 import "./auth-screen.css";
 
 export function authMessage(error: unknown): string {
@@ -18,7 +18,7 @@ export function authMessage(error: unknown): string {
   return messages[e?.code ?? ""] ?? (e?.message === "Failed to fetch" ? "Não foi possível conectar. Confira sua internet." : e?.message ?? "Não foi possível acessar sua conta.");
 }
 
-export default function AuthScreen({ recovery = false, onRecovered = () => {} }: { recovery?: boolean; onRecovered?: () => void }) {
+export default function AuthScreen({ client: supabase, supabaseUrl, supabaseKey, recovery = false, onRecovered = () => {} }: { client: SupabaseClient | null; supabaseUrl: string; supabaseKey: string; recovery?: boolean; onRecovered?: () => void }) {
   const [mode, setMode] = useState<"login" | "signup" | "reset" | "verify">("login");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -71,8 +71,8 @@ export default function AuthScreen({ recovery = false, onRecovered = () => {} }:
     if (!supabase || busy) return;
     setBusy(true); setMessage(""); setFailed(false);
     try {
-      const settings = await fetch(process.env.NEXT_PUBLIC_SUPABASE_URL + "/auth/v1/settings", {
-        headers: { apikey: process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY! },
+      const settings = await fetch(supabaseUrl + "/auth/v1/settings", {
+        headers: { apikey: supabaseKey },
         signal: AbortSignal.timeout(15000),
       });
       if (!settings.ok) throw new Error("Não foi possível verificar o acesso com Google.");
