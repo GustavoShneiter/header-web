@@ -1,13 +1,13 @@
 "use client";
 
 import {useState} from "react";
-import {ArrowRight,ArrowUpRight,CalendarDays,Check,Flame,Plus,Target,Timer} from "lucide-react";
+import {ArrowRight,ArrowUpRight,CalendarDays,Check,Flame,Plus,Target} from "lucide-react";
 import {Checkbox} from "./ui/checkbox";
 import {dateKey,dayNames,weekDays} from "@/lib/planner.mjs";
 import type {Challenge,Event,Habit,Preferences,Task} from "@/lib/workspace-types";
 
 type HomeTab="today"|"reminders"|"better"|"habits";
-type Props={today:Date;tasks:Task[];events:Event[];habits:Habit[];challenges:Challenge[];prefs:Preferences;busy:boolean;onTask:(task:Task)=>void;onToggleTask:(task:Task)=>void;onNewTask:()=>void;onEvent:(event:Event)=>void;onNewEvent:()=>void;onToggleHabit:(habit:Habit)=>void;onHabit:()=>void;onChallenge:()=>void;onWeek:()=>void;onCalendar:(date:string)=>void;onPomodoro:()=>void};
+type Props={today:Date;tasks:Task[];events:Event[];habits:Habit[];challenges:Challenge[];prefs:Preferences;busy:boolean;onTask:(task:Task)=>void;onToggleTask:(task:Task)=>void;onNewTask:()=>void;onEvent:(event:Event)=>void;onNewEvent:()=>void;onToggleHabit:(habit:Habit)=>void;onHabit:()=>void;onChallenge:()=>void;onWeek:()=>void;onCalendar:(date:string)=>void};
 
 export default function HomeDashboard(props:Props){
   const {today,tasks,events,habits,challenges,prefs,busy}=props;
@@ -20,7 +20,6 @@ export default function HomeDashboard(props:Props){
   const completedTasks=todayTasks.filter(task=>task.completed).length;
   const todayEvents=events.filter(event=>event.date===todayKey).sort((a,b)=>a.time.localeCompare(b.time));
   const todayHabits=habits.filter(habit=>!habit.archived&&habit.days.includes(today.getDay()));
-  const completedHabits=todayHabits.filter(habit=>habit.completions.includes(todayKey)).length;
   const activeChallenges=challenges.filter(challenge=>!challenge.archived);
 
   return <div className="premium-home">
@@ -36,7 +35,5 @@ export default function HomeDashboard(props:Props){
       </div>
       <div className="home-command-foot"><span><Check size={15}/>{completedTasks} de {todayTasks.length} tarefas concluídas</span><button onClick={tab==="reminders"?()=>props.onCalendar(todayKey):tab==="habits"?props.onHabit:tab==="better"?props.onChallenge:props.onWeek}>Ver tudo <ArrowRight size={15}/></button></div>
     </section>
-
-    <div className="home-lower-grid"><section className="home-focus glass-surface"><div><span className="home-kicker"><Target size={15}/> FOCO DA SEMANA</span><h2>{prefs.focus||"Um passo de cada vez."}</h2><span className="home-focus-progress"><i style={{width:(todayTasks.length?completedTasks/todayTasks.length*100:0)+"%"}}/></span><small>{completedTasks} de {todayTasks.length} tarefas de hoje</small></div><span className="home-focus-orbit" aria-hidden="true"/></section><div className="home-small-grid"><button className="home-mini glass-surface" onClick={props.onPomodoro}><span className="home-mini-icon"><Timer size={21}/></span><span><strong>Pomodoro</strong><small>Abra seu tempo de foco</small></span><ArrowUpRight size={18}/></button><button className="home-mini glass-surface" onClick={props.onHabit}><span className="home-mini-icon"><Flame size={21}/></span><span><strong>Hábitos de hoje</strong><small>{completedHabits} de {todayHabits.length} concluídos</small></span><ArrowUpRight size={18}/></button></div></div>
   </div>;
 }
