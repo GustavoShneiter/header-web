@@ -70,10 +70,12 @@ html[data-motion=off] .workspace:before,html[data-motion=off] .workspace:after,h
 
 /* Nocturne: black optical glass, restrained colour and content-led motion. */
 html:root,html[data-theme=dark],html[data-theme=light]{--bg:#050506;--panel:#121215d9;--ink:#f5f3ef;--muted:#96939d;--line:#ffffff1c;--soft:#111114;--glass-top:#ffffff18;--glass-bottom:#ffffff07;--glass-blur:26px;color-scheme:dark}
+html[data-theme=light]{--bg:#0d0d10;--panel:#1b1b20d9;--soft:#17171c;--glass-top:#ffffff1d;--glass-bottom:#ffffff09}
 html[data-glass=soft]{--glass-top:#ffffff14;--glass-bottom:#ffffff08;--glass-blur:15px}
 html[data-glass=vivid]{--glass-top:#ffffff20;--glass-bottom:#ffffff06;--glass-blur:36px}
 body{background:#050506;color:var(--ink)}
 .workspace,.workspace[data-accent]{background:radial-gradient(ellipse 80% 50% at 50% -12%,color-mix(in srgb,var(--accent) 14%,transparent),transparent 65%),linear-gradient(180deg,#08080a 0,#040405 58%,#08080a 100%)}
+html[data-theme=light] .workspace{background:radial-gradient(ellipse 80% 50% at 50% -12%,color-mix(in srgb,var(--accent) 16%,transparent),transparent 65%),linear-gradient(180deg,#111115 0,#09090b 58%,#0d0d11 100%)}
 .workspace:before{width:44vw;height:22vw;top:-9vw;right:-5vw;border-radius:50%;background:color-mix(in srgb,var(--accent) 26%,#20202a);opacity:.32;filter:blur(95px);animation:nocturne-orbit 20s ease-in-out infinite alternate}
 .workspace:after{width:38vw;height:18vw;bottom:-11vw;left:3vw;border-radius:50%;background:#342a55;opacity:.18;filter:blur(110px);animation:nocturne-orbit 27s ease-in-out -8s infinite alternate-reverse}
 @keyframes nocturne-orbit{0%{transform:translate3d(-4%,0,0) scale(.92)}55%{transform:translate3d(5%,-5%,0) scale(1.05)}100%{transform:translate3d(12%,3%,0) scale(.96)}}

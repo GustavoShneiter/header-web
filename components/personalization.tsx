@@ -7,7 +7,7 @@ import {Popover,PopoverContent,PopoverTrigger} from "./ui/popover";
 import {periods} from "@/lib/planner.mjs";
 import type {AccentColor,Preferences} from "@/lib/workspace-types";
 
-const themes=[{id:"light",label:"Claro",icon:Sun},{id:"dark",label:"Escuro",icon:Moon},{id:"system",label:"Sistema",icon:Monitor}] as const;
+const themes=[{id:"dark",label:"Preto",icon:Moon},{id:"light",label:"Grafite",icon:Sun},{id:"system",label:"Sistema",icon:Monitor}] as const;
 const accents:[AccentColor,string,string][]=[
   ["coral","Coral","#fb714c"],["violet","Violeta","#8268d8"],["ocean","Oceano","#2877bb"],
   ["jade","Jade","#218a78"],["amber","Âmbar","#c68024"],["berry","Ameixa","#b35382"],
