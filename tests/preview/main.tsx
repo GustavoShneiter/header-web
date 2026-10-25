@@ -1,9 +1,7 @@
-// Isolated UI harness: all records and writes are only in this tab's memory.
 import {createRoot} from "react-dom/client";
-import type {User} from "@supabase/supabase-js";
+import type {AppUser} from "../../lib/app-user";
 import Workspace from "../../components/workspace";
-import {supabase} from "./mock-db";
 import "../../app/globals.css";
 import "../../app/liquid-glass.css";
-const user={id:"qa-user",aud:"authenticated",email:"teste@example.test",created_at:"2026-01-01T00:00:00Z",user_metadata:{full_name:"Conta de teste"},app_metadata:{provider:"email"}} as User;
-createRoot(document.getElementById("root")!).render(<Workspace client={supabase as never} user={user}/>);
+const user={id:"qa-user",email:"teste@example.test",name:"Conta de teste",createdAt:"2026-01-01T00:00:00Z",provider:"email"} satisfies AppUser;
+createRoot(document.getElementById("root")!).render(<Workspace user={user}/>);
