@@ -7,7 +7,6 @@ import {dateKey,dayNames,periods,weekDays} from "@/lib/planner.mjs";
 import type {Event,Preferences,Task} from "@/lib/workspace-types";
 
 type Props={today:Date;tasks:Task[];events:Event[];prefs:Preferences;dragging:string|null;taskCard:(task:Task)=>ReactNode;onNewTask:(day:number,period:string)=>void;onMove:(event:DragEvent,day:number,period:string)=>void;onCalendar:(date:string)=>void};
-const spring={type:"spring" as const,stiffness:320,damping:28,mass:.8};
 
 export default function WeeklyPlanner({today,tasks,events,prefs,dragging,taskCard,onNewTask,onMove,onCalendar}:Props){
   const week=weekDays(today,prefs.weekStart) as Date[];
@@ -33,10 +32,10 @@ export default function WeeklyPlanner({today,tasks,events,prefs,dragging,taskCar
 
     <div className="week-section-head"><div><small>ORGANIZAÇÃO</small><h2>Mapa de energia da semana</h2></div><p>Arraste tarefas entre períodos. O painel mede a carga real sem esconder o que ainda está solto.</p></div>
 
-    <div className="week-scroll"><div className="week-board week-board-rich">{week.map(date=>{const dayTasks=roots.filter(task=>task.weekday===date.getDay()),dayDone=dayTasks.filter(task=>task.completed).length,isToday=dateKey(date)===dateKey(today);return <motion.section layout key={dateKey(date)} className={"day-column "+(isToday?"today":"")} transition={spring}>
+    <div className="week-scroll"><div className="week-board week-board-rich">{week.map(date=>{const dayTasks=roots.filter(task=>task.weekday===date.getDay()),dayDone=dayTasks.filter(task=>task.completed).length,isToday=dateKey(date)===dateKey(today);return <section key={dateKey(date)} className={"day-column "+(isToday?"today":"")}>
       <header><div><small>{dayNames[date.getDay()].slice(0,3).toUpperCase()}</small><h2>{date.getDate()}</h2></div>{isToday?<b>HOJE</b>:<span>{dayDone}/{dayTasks.length}</span>}<i><u style={{width:dayTasks.length?`${dayDone*100/dayTasks.length}%`:"0%"}}/></i></header>
       {periods.map(period=>{const rows=tasks.filter(task=>task.weekday===date.getDay()&&task.period===period.id&&(!task.parent_id||!tasks.some(parent=>parent.id===task.parent_id&&parent.weekday===task.weekday&&parent.period===task.period))).sort((a,b)=>a.position-b.position);return <div key={period.id} className={"period-zone "+(dragging?"accept-drop":"")} onDragOver={event=>{if(dragging)event.preventDefault();}} onDrop={event=>onMove(event,date.getDay(),period.id)}><div className="period-heading"><h3>{period.label}</h3><span>{rows.length}</span></div>{rows.map(task=>taskCard(task))}<button className="add-inline" onClick={()=>onNewTask(date.getDay(),period.id)}><Plus size={13}/> Adicionar</button></div>})}
-    </motion.section>})}</div></div>
+    </section>})}</div></div>
 
     <section className="week-organizer">
       <div className="week-organizer-copy"><small>LEITURA DA SEMANA</small><h2>Clareza antes de velocidade.</h2><p>{withoutTime?`${withoutTime} ${withoutTime===1?"tarefa ainda está":"tarefas ainda estão"} sem horário. Distribua primeiro o que exige energia, depois encaixe o restante.`:"As tarefas abertas já têm horário. Agora proteja os blocos mais importantes."}</p></div>
