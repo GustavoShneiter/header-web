@@ -1,7 +1,7 @@
 "use client";
 
 import {useMemo,useState} from "react";
-import {ArrowDown, CircleDashed, ExternalLink,ImageIcon,Plus,Trash2,TrendingUp} from "lucide-react";
+import {ExternalLink,ImageIcon,Plus,Trash2} from "lucide-react";
 import type {FinanceItem} from "@/lib/workspace-types";
 import {Field,Modal,Empty} from "./planner-fields";
 
@@ -22,8 +22,7 @@ function FinanceEditor({initial,groups,onSave,onClose}:{initial:FinanceItem;grou
 
 function FinanceRow({item,busy,deleting,onEdit,onDelete}:{item:FinanceItem;busy:boolean;deleting:boolean;onEdit:()=>void;onDelete:()=>void}){
   const planned=item.kind==="planned";
-  const KindIcon=item.kind==="income"?TrendingUp:item.kind==="bill"?ArrowDown:CircleDashed;
-  return <article className="finance-record"><button className="finance-record-main" onClick={onEdit}><span className="finance-record-icon"><KindIcon size={15} strokeWidth={1.8}/></span><span><strong>{item.title}</strong><small>{planned?(item.description||"Compra planejada"):item.category||item.description||"Sem detalhes adicionados"}</small></span></button><div className="finance-record-value"><strong>{money.format(Number(item.amount))}</strong>{planned&&(item.product_url||item.photo_url)&&<span>{item.product_url&&<a href={item.product_url} target="_blank" rel="noreferrer" aria-label={"Abrir link de "+item.title}><ExternalLink size={14}/></a>}{item.photo_url&&<ImageIcon size={14} aria-label="Foto adicionada"/>}</span>}</div>{planned&&item.photo_url&&<a className="finance-record-photo" href={item.photo_url} target="_blank" rel="noreferrer" aria-label={"Ampliar foto de "+item.title}><img src={item.photo_url} alt={"Foto de "+item.title}/></a>}<button className="icon-button finance-record-delete" disabled={busy||deleting} aria-label={"Excluir "+item.title} onClick={onDelete}><Trash2 size={16}/></button></article>;
+  return <article className="finance-record"><button className="finance-record-main" onClick={onEdit}><span className="finance-record-icon">{item.kind==="income"?"↗":item.kind==="bill"?"↓":"◎"}</span><span><strong>{item.title}</strong><small>{planned?(item.description||"Compra planejada"):item.category||item.description||"Sem detalhes adicionados"}</small></span></button><div className="finance-record-value"><strong>{money.format(Number(item.amount))}</strong>{planned&&(item.product_url||item.photo_url)&&<span>{item.product_url&&<a href={item.product_url} target="_blank" rel="noreferrer" aria-label={"Abrir link de "+item.title}><ExternalLink size={14}/></a>}{item.photo_url&&<ImageIcon size={14} aria-label="Foto adicionada"/>}</span>}</div>{planned&&item.photo_url&&<a className="finance-record-photo" href={item.photo_url} target="_blank" rel="noreferrer" aria-label={"Ampliar foto de "+item.title}><img src={item.photo_url} alt={"Foto de "+item.title}/></a>}<button className="icon-button finance-record-delete" disabled={busy||deleting} aria-label={"Excluir "+item.title} onClick={onDelete}><Trash2 size={16}/></button></article>;
 }
 
 export default function Finance({items,busy,onSave,onDelete}:{items:FinanceItem[];busy:boolean;onSave:(item:FinanceItem,photo:File|null)=>Promise<void>;onDelete:(item:FinanceItem)=>Promise<void>}){
