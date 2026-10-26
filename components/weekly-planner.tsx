@@ -1,8 +1,7 @@
 "use client";
 
 import type {DragEvent,ReactNode} from "react";
-import {motion} from "motion/react";
-import {ArrowUpRight,CalendarDays,CheckCircle2,Clock3,Plus,Sparkles} from "lucide-react";
+import {ArrowUpRight,CalendarDays,CheckCircle2,Clock3,Plus} from "lucide-react";
 import {dateKey,dayNames,periods,weekDays} from "@/lib/planner.mjs";
 import type {Event,Preferences,Task} from "@/lib/workspace-types";
 
@@ -19,9 +18,9 @@ export default function WeeklyPlanner({today,tasks,events,prefs,dragging,taskCar
   const busiest=week.reduce((best,date)=>{const amount=roots.filter(task=>task.weekday===date.getDay()).length;return amount>best.amount?{date,amount}:best;},{date:week[0],amount:-1});
   const completion=roots.length?Math.round(done*100/roots.length):0;
 
-  return <motion.div className="weekly-experience" initial={{opacity:0,y:14}} animate={{opacity:1,y:0}} transition={{duration:.48,ease:[.22,1,.36,1]}}>
+  return <div className="weekly-experience">
     <section className="week-intelligence glass-surface">
-      <div className="week-intention"><span><Sparkles size={15}/> INTENÇÃO</span><h2>{prefs.focus}</h2><p>{week[0].toLocaleDateString("pt-BR",{day:"numeric",month:"short"})} — {week[6].toLocaleDateString("pt-BR",{day:"numeric",month:"short",year:"numeric"})}</p></div>
+      <div className="week-intention"><h2>Foco da semana</h2><blockquote>{prefs.focus}</blockquote><p>{week[0].toLocaleDateString("pt-BR",{day:"numeric",month:"short"})} — {week[6].toLocaleDateString("pt-BR",{day:"numeric",month:"short",year:"numeric"})}</p></div>
       <div className="week-metrics">
         <article><small>Progresso</small><strong>{completion}%</strong><span>{done} concluídas</span></article>
         <article><small>Em aberto</small><strong>{open}</strong><span>{withoutTime} sem horário</span></article>
@@ -30,7 +29,7 @@ export default function WeeklyPlanner({today,tasks,events,prefs,dragging,taskCar
       </div>
     </section>
 
-    <div className="week-section-head"><div><small>ORGANIZAÇÃO</small><h2>Mapa de energia da semana</h2></div><p>Arraste tarefas entre períodos. O painel mede a carga real sem esconder o que ainda está solto.</p></div>
+    <div className="week-section-head"><div><h2>Organize a semana por energia</h2></div><p>Arraste tarefas entre períodos. A carga muda sem deslocar os outros dias.</p></div>
 
     <div className="week-scroll"><div className="week-board week-board-rich">{week.map(date=>{const dayTasks=roots.filter(task=>task.weekday===date.getDay()),dayDone=dayTasks.filter(task=>task.completed).length,isToday=dateKey(date)===dateKey(today);return <section key={dateKey(date)} className={"day-column "+(isToday?"today":"")}>
       <header><div><small>{dayNames[date.getDay()].slice(0,3).toUpperCase()}</small><h2>{date.getDate()}</h2></div>{isToday?<b>HOJE</b>:<span>{dayDone}/{dayTasks.length}</span>}<i><u style={{width:dayTasks.length?`${dayDone*100/dayTasks.length}%`:"0%"}}/></i></header>
@@ -38,12 +37,12 @@ export default function WeeklyPlanner({today,tasks,events,prefs,dragging,taskCar
     </section>})}</div></div>
 
     <section className="week-organizer">
-      <div className="week-organizer-copy"><small>LEITURA DA SEMANA</small><h2>Clareza antes de velocidade.</h2><p>{withoutTime?`${withoutTime} ${withoutTime===1?"tarefa ainda está":"tarefas ainda estão"} sem horário. Distribua primeiro o que exige energia, depois encaixe o restante.`:"As tarefas abertas já têm horário. Agora proteja os blocos mais importantes."}</p></div>
+      <div className="week-organizer-copy"><h2>Clareza antes de velocidade.</h2><p>{withoutTime?`${withoutTime} ${withoutTime===1?"tarefa ainda está":"tarefas ainda estão"} sem horário. Distribua primeiro o que exige energia, depois encaixe o restante.`:"As tarefas abertas já têm horário. Agora proteja os blocos mais importantes."}</p></div>
       <div className="week-organizer-signals">
         <button onClick={()=>onCalendar(dateKey(today))}><CalendarDays size={18}/><span><strong>Agenda conectada</strong><small>{weekEvents.length?`${weekEvents.length} compromissos nesta semana`:"Nenhum compromisso datado"}</small></span><ArrowUpRight size={16}/></button>
         <div><Clock3 size={18}/><span><strong>{withoutTime} sem horário</strong><small>itens que ainda pedem decisão</small></span></div>
         <div><CheckCircle2 size={18}/><span><strong>{done} concluídas</strong><small>progresso real da rotina</small></span></div>
       </div>
     </section>
-  </motion.div>;
+  </div>;
 }
