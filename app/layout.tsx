@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import "./liquid-glass.css";
+import "./home-week-refinement.css";
 
 export const metadata: Metadata = {
   title: "Header · Seu espaço pessoal",
