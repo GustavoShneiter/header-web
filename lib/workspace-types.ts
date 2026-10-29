@@ -4,5 +4,5 @@ export type Habit = {id:string;owner_id:string;title:string;goal:string;days:num
 export type Challenge = {id:string;owner_id:string;title:string;situation:string;desired:string;strategy:string;checks:{date:string;score:number;note:string}[];archived:boolean};
 export type FinanceItem = {id:string;owner_id:string;kind:"income"|"bill"|"planned";title:string;category:string;amount:number;description:string;product_url:string;photo_url:string;created_at?:string};
 export type AccentColor = "coral"|"violet"|"ocean"|"jade"|"amber"|"berry";
-export type Preferences = {theme:"light"|"dark"|"system";accent:AccentColor;glass:"soft"|"balanced"|"vivid";motion:"gentle"|"off";weekStart:number;showCompleted:boolean;compact:boolean;focus:string;defaultPeriod:string};
-export const defaults:Preferences = {theme:"light",accent:"coral",glass:"balanced",motion:"gentle",weekStart:0,showCompleted:true,compact:false,focus:"Usar o tempo com intenção, uma tarefa de cada vez.",defaultPeriod:"morning"};
+export type Preferences = {theme:"light"|"dark"|"system";accent:AccentColor;font:"editorial"|"system"|"compact";glass:"soft"|"balanced"|"vivid";motion:"gentle"|"off";weekStart:number;showCompleted:boolean;compact:boolean;focus:string;defaultPeriod:string};
+export const defaults:Preferences = {theme:"light",accent:"amber",font:"editorial",glass:"balanced",motion:"gentle",weekStart:1,showCompleted:true,compact:false,focus:"Usar o tempo com intenção, uma tarefa de cada vez.",defaultPeriod:"morning"};

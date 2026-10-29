@@ -7,10 +7,10 @@ import {Popover,PopoverContent,PopoverTrigger} from "./ui/popover";
 import {periods} from "@/lib/planner.mjs";
 import type {AccentColor,Preferences} from "@/lib/workspace-types";
 
-const themes=[{id:"dark",label:"Preto",icon:Moon},{id:"light",label:"Grafite",icon:Sun},{id:"system",label:"Sistema",icon:Monitor}] as const;
+const themes=[{id:"dark",label:"Escuro",icon:Moon},{id:"light",label:"Claro",icon:Sun},{id:"system",label:"Sistema",icon:Monitor}] as const;
 const accents:[AccentColor,string,string][]=[
   ["coral","Coral","#fb714c"],["violet","Violeta","#8268d8"],["ocean","Oceano","#2877bb"],
-  ["jade","Jade","#218a78"],["amber","Âmbar","#c68024"],["berry","Ameixa","#b35382"],
+  ["jade","Jade","#218a78"],["amber","Âmbar","#ffd21a"],["berry","Ameixa","#b35382"],
 ];
 
 export function AppearanceMenu({theme,busy,onSelect}:{theme:Preferences["theme"];busy:boolean;onSelect:(theme:Preferences["theme"])=>void}){
@@ -22,7 +22,7 @@ export function PersonalizationFields({value,onChange}:{value:Preferences;onChan
     <div className="settings-heading"><span>Seu visual</span><h3>Faça o Header ter a sua cara.</h3><p>A cor escolhida aparece nos botões, indicadores e destaques em todas as telas.</p></div>
     <div className="settings-group"><span className="settings-label">Cor base</span><div className="accent-options" role="radiogroup" aria-label="Cor base do aplicativo">{accents.map(([id,label,color])=><button key={id} type="button" role="radio" aria-checked={value.accent===id} className="accent-option" onClick={()=>onChange({...value,accent:id})}><span className="accent-swatch" style={{background:color}}>{value.accent===id&&<Check size={17}/>}</span><span>{label}</span></button>)}</div></div>
     <div className="settings-group"><span className="settings-label">Tema</span><div className="theme-settings" role="radiogroup" aria-label="Tema do aplicativo">{themes.map(item=><button key={item.id} type="button" role="radio" aria-checked={value.theme===item.id} onClick={()=>onChange({...value,theme:item.id})}><item.icon size={18}/><span>{item.label}</span>{value.theme===item.id&&<Check size={15}/>}</button>)}</div></div>
-    <div className="form-grid"><Choice label="Intensidade do vidro" value={value.glass} onChange={v=>onChange({...value,glass:v as Preferences["glass"]})} options={[{value:"soft",label:"Suave"},{value:"balanced",label:"Equilibrada"},{value:"vivid",label:"Marcante"}]}/><Choice label="A semana começa em" value={String(value.weekStart)} onChange={v=>onChange({...value,weekStart:Number(v)})} options={[{value:"0",label:"Domingo"},{value:"1",label:"Segunda-feira"}]}/><Choice label="Período padrão das tarefas" value={value.defaultPeriod} onChange={v=>onChange({...value,defaultPeriod:v})} options={periods.map(period=>({value:period.id,label:period.label}))}/></div>
+    <div className="form-grid"><Choice label="Fonte" value={value.font} onChange={v=>onChange({...value,font:v as Preferences["font"]})} options={[{value:"editorial",label:"Editorial"},{value:"system",label:"Sistema"},{value:"compact",label:"Compacta"}]}/><Choice label="Intensidade do vidro" value={value.glass} onChange={v=>onChange({...value,glass:v as Preferences["glass"]})} options={[{value:"soft",label:"Suave"},{value:"balanced",label:"Equilibrada"},{value:"vivid",label:"Marcante"}]}/><Choice label="A semana começa em" value={String(value.weekStart)} onChange={v=>onChange({...value,weekStart:Number(v)})} options={[{value:"0",label:"Domingo"},{value:"1",label:"Segunda-feira"}]}/><Choice label="Período padrão das tarefas" value={value.defaultPeriod} onChange={v=>onChange({...value,defaultPeriod:v})} options={periods.map(period=>({value:period.id,label:period.label}))}/></div>
     <Field label="Foco da semana"><textarea maxLength={500} rows={3} value={value.focus} onChange={event=>onChange({...value,focus:event.target.value})}/></Field>
     <label className="setting-row"><span>Movimento suave<small>Reflexos e transições delicadas pelo app.</small></span><Switch checked={value.motion==="gentle"} onCheckedChange={checked=>onChange({...value,motion:checked?"gentle":"off"})}/></label>
     <label className="setting-row"><span>Mostrar tarefas concluídas<small>Mantenha suas conquistas visíveis no planejamento.</small></span><Switch checked={value.showCompleted} onCheckedChange={checked=>onChange({...value,showCompleted:checked})}/></label>
