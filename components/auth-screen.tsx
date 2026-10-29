@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import {useEffect,useState,type FormEvent} from "react";
+import {useState,type FormEvent} from "react";
 import {authClient} from "@/lib/auth-client";
 import "./auth-screen.css";
 
@@ -27,15 +27,6 @@ export default function AuthScreen(){
  const [message,setMessage]=useState("");
  const [failed,setFailed]=useState(false);
  const [visible,setVisible]=useState(false);
- const [story,setStory]=useState(0);
- const stories=[
-  {image:"/login/morning-focus.png",top:"Seu tempo.",bottom:"Seu ritmo."},
-  {image:"/login/yoga-sunrise.png",top:"Menos ruído.",bottom:"Mais presença."},
-  {image:"/login/coffee-ritual.png",top:"Um passo.",bottom:"Depois, outro."},
-  {image:"/login/library-planning.png",top:"Clareza para",bottom:"o que importa."},
-  {image:"/login/park-reset.png",top:"Aqui começa",bottom:"o seu espaço."},
- ];
- useEffect(()=>{const timer=window.setInterval(()=>setStory(current=>(current+1)%stories.length),8000);return()=>window.clearInterval(timer);},[stories.length]);
 
  async function submit(event:FormEvent){
   event.preventDefault();
@@ -54,10 +45,10 @@ export default function AuthScreen(){
  function change(next:typeof mode){setMode(next);setMessage("");setFailed(false);}
  const title=mode==="signup"?"Crie sua conta.":"Bom ter você por aqui.";
  return <main className="auth-page">
-  <aside className="auth-story" style={{backgroundImage:`linear-gradient(90deg,rgba(20,31,22,.91),rgba(20,31,22,.53)),url(${stories[story].image})`}}>
+  <aside className="auth-story">
    <Link className="auth-brand" href="/"><span>h.</span>header</Link>
-   <div className="auth-story-copy" key={story}><p className="auth-kicker">SEU ESPAÇO PESSOAL</p><h1>{stories[story].top}<br/><span>{stories[story].bottom}</span></h1></div>
-   <div className="auth-story-footer"><div className="auth-story-dots" aria-label={`Imagem ${story+1} de ${stories.length}`}>{stories.map((item,index)=><button key={item.image} type="button" aria-label={`Ver imagem ${index+1}`} aria-current={story===index} onClick={()=>setStory(index)}/>)}</div></div>
+   <div className="auth-story-copy"><p className="auth-kicker">SEU ESPAÇO PESSOAL</p><h1>Seu tempo.<br/><span>Seu ritmo.</span></h1></div>
+   <img className="auth-story-art" src="/home-bicycle-watercolor.png" width="1536" height="1024" alt="Pessoa pedalando entre folhas e flores em aquarela"/>
   </aside>
   <section className="auth-form-panel">
    <div className="auth-card">
